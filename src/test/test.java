@@ -155,7 +155,7 @@ public class test {
 				}
 			} // read 상세목록
 
-			if (i.equals("article search")) {
+			if (i.equals("search")) {
 				System.out.println("검색 항목을 선택해주세요 (1. 제목, 2. 내용, 3. 제목 + 내용, 4. 작성자) :  ");
 				int targetId = sc.nextInt();
 				Article target = articledao.get_Article_Id(targetId);
