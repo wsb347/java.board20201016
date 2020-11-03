@@ -1,5 +1,6 @@
 package test;
 
+import java.nio.channels.MembershipKey;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -108,52 +109,64 @@ public class App {
 						System.out.println("없는 게시물입니다.");
 					} else {
 						target.setRead(target.getRead() + 1);
-	
+
 						printArticle(target);
 						while (true) {
 							System.out.println("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 좋아요, 3. 수정, 4. 삭제, 5. 목록으로) : ");
 							int targetnum = sc.nextInt();
-	
+
 							if (targetnum == 1) {
 								Comment r = new Comment();
-	
+
 								System.out.println("댓글 내용을 입력해주세요:");
 								String body = sc.next();
 								r.setParentId(target.getId());
 								r.setBody(body);
-								r.setNickname("익명");
+								r.setNickname(loginedMember.getNickName());
 								r.setParentId(targetId);
-	
+
 								commentdao.insertcomment(r);
 								System.out.println("댓글이 등록되었습니다.");
 								printArticle(target);
-	
+
 							}
-	
+
 							else if (targetnum == 2) {
-								target.setLike(target.getLike() + 1);
-								System.out.println("좋아요 : " + target.getLike());
-	
+								int a = 1;
+								if(loginedMember.getCheckNo() == 0) {
+									loginedMember.setCheckNo(a);
+									target.setLike(target.getLike() + 1);
+									System.out.println("해당 게시물을 좋아합니다.");								
+								} else {
+									a =0;
+									loginedMember.setCheckNo(a);
+									target.setLike(target.getLike() - 1);
+									System.out.println("해당 게시물의 좋아요를 해제합니다.");
+								}
+
 							} else if (targetnum == 3) {
-								
-								
+
 								if (target.getLoginId().equals(loginedMember.getLoginId())) {
 									System.out.println("게시물 제목을 입력해주세요 :");
 									String newTitle = sc.next();
 									System.out.println("게시물 내용을 입력해주세요 :");
 									String newBody = sc.next();
-	
+
 									target.setTitle(newTitle);
 									target.setBody(newBody);
 								} else {
-									System.out.println("자신의 게시물만 수정/삭제 할 수 있습니다.");								
+									System.out.println("자신의 게시물만 수정/삭제 할 수 있습니다.");
 								}
-	
-	
+
 							} else if (targetnum == 4) {
-								articledao.removeArticle(target);
-								System.out.println(targetId + "번 게시글이 삭제되었습니다.");
-								break;
+								if (target.getLoginId().equals(loginedMember.getLoginId())) {
+									articledao.removeArticle(target);
+									System.out.println(targetId + "번 게시글이 삭제되었습니다.");
+									break;
+
+								} else {
+									System.out.println("자신의 게시물만 수정/삭제 할 수 있습니다.");
+								}
 							} else if (targetnum == 5) {
 								break;
 							}

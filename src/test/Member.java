@@ -6,6 +6,7 @@ public class Member {
 	private String loginPw;
 	private String nickName;
 	private String date;
+	private int checkNo = 0;
 	
 	public Member() {
 		
@@ -19,6 +20,15 @@ public class Member {
 	}
 	
 	
+	
+	public int getCheckNo() {
+		return checkNo;
+	}
+
+	public void setCheckNo(int checkNo) {
+		this.checkNo = checkNo;
+	}
+
 	public int getId() {
 		return id;
 	}
