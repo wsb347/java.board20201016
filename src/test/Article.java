@@ -10,6 +10,15 @@ public class Article {
 	private String nickname;
 	private String comment;
 	private int like;
+	private String loginId;
+	
+	public String getLoginId() {
+		return loginId;
+	}
+	
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
 
 	public int getLike() {
 		return like;
@@ -63,12 +72,13 @@ public class Article {
 
 	}
 
-	public Article(int id, String title, String body, String date, String nickname) {
+	public Article(int id, String title, String body, String date, String nickname, String loginId) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
 		this.date = date;
 		this.nickname = nickname;
+		this.loginId = loginId;
 	}
 
 	public int getId() {

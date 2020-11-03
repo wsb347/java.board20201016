@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
-	
+
 	CommentDao commentdao = new CommentDao();
 	ArticleDao articledao = new ArticleDao();
 	MemberDao memberdao = new MemberDao();
 	Member loginedMember = null;
-	
-	
-	
+
 	public void start() {
 		for (;;) {
-			if(loginedMember == null) {
-				System.out.println("명령어를 입력해주세요 : ");				
+			if (loginedMember == null) {
+				System.out.println("명령어를 입력해주세요 : ");
 			} else {
-				System.out.println("명령어 입력[" + loginedMember.getLoginId() + "(" + loginedMember.getNickName() + ")" + "] : ");
+				System.out.println(
+						"명령어 입력[" + loginedMember.getLoginId() + "(" + loginedMember.getNickName() + ")" + "] : ");
 			}
 			Scanner sc = new Scanner(System.in);
 			String i = sc.nextLine();
@@ -28,9 +27,9 @@ public class App {
 			} // exit 종료
 
 			if (i.equals("article add")) {
-				if(isLogin()) {
+				if (isLogin()) {
 					Article a = new Article();
-					
+
 					a.setNickname(loginedMember.getNickName());
 					System.out.println("게시물 제목을 입력해주세요 :");
 					String title = sc.next();
@@ -38,9 +37,10 @@ public class App {
 					System.out.println("게시물 내용을 입력해주세요 : ");
 					String body = sc.next();
 					a.setBody(body);
-					
+					a.setLoginId(loginedMember.getLoginId());
+
 					articledao.insertArticle(a);
-					System.out.println("게시물이 등록되었습니다.");	
+					System.out.println("게시물이 등록되었습니다.");
 				}
 			} // add 추가
 
@@ -100,67 +100,63 @@ public class App {
 			} // delete 삭제
 
 			if (i.equals("article read")) {
-				System.out.println("상세보기 하실 게시글의 번호을 입력해주세요 : ");
-				int targetId = sc.nextInt();
-				Article target = articledao.get_Article_Id(targetId);
-				if (target == null) {
-					System.out.println("없는 게시물입니다.");
-				} else {
-					target.setRead(target.getRead() + 1);
-
-					printArticle(target);
-					while (true) {
-						System.out.println("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 좋아요, 3. 수정, 4. 삭제, 5. 목록으로) : ");
-						int targetnum = sc.nextInt();
-
-						if (targetnum == 1) {
-							Comment r = new Comment();
-
-							System.out.println("댓글 내용을 입력해주세요:");
-							String body = sc.next();
-							r.setParentId(target.getId());
-							r.setBody(body);
-							r.setNickname("익명");
-							r.setParentId(targetId);
-
-							commentdao.insertcomment(r);
-							System.out.println("댓글이 등록되었습니다.");
-							printArticle(target);
-
-						}
-
-						else if (targetnum == 2) {
-							target.setLike(target.getLike() + 1);
-							System.out.println("좋아요 : " + target.getLike());
-
-						} else if (targetnum == 3) {
-							ArrayList<Article> articles = articledao.getArticles();
-							ArrayList<Member> members = memberdao.getMembers();
-
-							for (int j = 0; j < articles.size(); j++) {
-								Article article = articles.get(j);
-								Member member = members.get(j);
-								if(member.getId() == loginedMember.getId()) {
+				if (isLogin()) {
+					System.out.println("상세보기 하실 게시글의 번호을 입력해주세요 : ");
+					int targetId = sc.nextInt();
+					Article target = articledao.get_Article_Id(targetId);
+					if (target == null) {
+						System.out.println("없는 게시물입니다.");
+					} else {
+						target.setRead(target.getRead() + 1);
+	
+						printArticle(target);
+						while (true) {
+							System.out.println("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 좋아요, 3. 수정, 4. 삭제, 5. 목록으로) : ");
+							int targetnum = sc.nextInt();
+	
+							if (targetnum == 1) {
+								Comment r = new Comment();
+	
+								System.out.println("댓글 내용을 입력해주세요:");
+								String body = sc.next();
+								r.setParentId(target.getId());
+								r.setBody(body);
+								r.setNickname("익명");
+								r.setParentId(targetId);
+	
+								commentdao.insertcomment(r);
+								System.out.println("댓글이 등록되었습니다.");
+								printArticle(target);
+	
+							}
+	
+							else if (targetnum == 2) {
+								target.setLike(target.getLike() + 1);
+								System.out.println("좋아요 : " + target.getLike());
+	
+							} else if (targetnum == 3) {
+								
+								
+								if (target.getLoginId().equals(loginedMember.getLoginId())) {
 									System.out.println("게시물 제목을 입력해주세요 :");
 									String newTitle = sc.next();
 									System.out.println("게시물 내용을 입력해주세요 :");
 									String newBody = sc.next();
-									
+	
 									target.setTitle(newTitle);
-									target.setBody(newBody);									
+									target.setBody(newBody);
+								} else {
+									System.out.println("자신의 게시물만 수정/삭제 할 수 있습니다.");								
 								}
+	
+	
+							} else if (targetnum == 4) {
+								articledao.removeArticle(target);
+								System.out.println(targetId + "번 게시글이 삭제되었습니다.");
+								break;
+							} else if (targetnum == 5) {
+								break;
 							}
-							
-							System.out.println("자신의 게시물만 수정/삭제 할 수 있습니다.");
-							
-
-
-						} else if (targetnum == 4) {
-							articledao.removeArticle(target);
-							System.out.println(targetId + "번 게시글이 삭제되었습니다.");
-							break;
-						} else if (targetnum == 5) {
-							break;
 						}
 					}
 				}
@@ -179,19 +175,28 @@ public class App {
 			} // search 검색
 
 			if (i.equals("member signup")) {
-				
+
 				System.out.println("==== 회원 가입을 진행합니다 ====");
 				Member member = new Member();
-				System.out.print("아이디를 입력해주세요 : ");
-				String loginid = sc.next();
-				member.setLoginId(loginid);
+
+				while (true) {
+					System.out.print("아이디를 입력해주세요 : ");
+					String loginid = sc.next();
+					if (CheckId(loginid)) {
+						member.setLoginId(loginid);
+						break;
+					} else {
+						System.out.println("중복된 아이디입니다.");
+					}
+				}
+
 				System.out.print("비밀번호를 입력해주세요 : ");
 				String loginpw = sc.next();
 				member.setLoginPw(loginpw);
 				System.out.print("닉네임을 입력해주세요 : ");
 				String nickName = sc.next();
 				member.setNickName(nickName);
-				
+
 				memberdao.insertMembers(member);
 				System.out.println("==== 회원가입이 완료되었습니다. ====");
 			} // signup 회원가입
@@ -224,19 +229,19 @@ public class App {
 				System.out.println("article [add: 게시물 추가 / list : 게시물 목록 조회 / read : 게시물 조회 / search : 검색]\r\n"
 						+ "member [signup : 회원가입 / signin : 로그인 / findpass : 비밀번호 찾기 / findid : 아이디 찾기 / logout : 로그아웃 / myinfo : 나의 정보 확인및 수정]");
 			} // help 도움말
-			
+
 			if (i.equals("member logout")) {
-				if(isLogin()) {
+				if (isLogin()) {
 					loginedMember = null;
-					System.out.println("로그아웃 되었습니다");	
-				} 
-				
+					System.out.println("로그아웃 되었습니다");
+				}
+
 			}
 
 		} // for 무한반복
 
 	}
-	
+
 	private void printArticles(ArrayList<Article> articleList) {
 		for (int i = 0; i < articleList.size(); i++) {
 			Article article = articleList.get(i);
@@ -289,5 +294,21 @@ public class App {
 			return true;
 		}
 	}
-	
+
+	private boolean CheckId(String loginid) {
+		ArrayList<Member> members = memberdao.getMembers();
+		int a = 0;
+		for (int j = 0; j < members.size(); j++) {
+			Member member = members.get(j);
+			if (member.getLoginId().equals(loginid)) {
+				a = 1;
+				return false;
+			}
+		}
+		if (a == 0) {
+			return true;
+		}
+		return false;
+	}
+
 }
