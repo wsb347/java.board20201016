@@ -12,6 +12,7 @@ public class Article {
 	private int like;
 	private String loginId;
 	
+	
 	public String getLoginId() {
 		return loginId;
 	}

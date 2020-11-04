@@ -10,6 +10,9 @@ public class App {
 	ArticleDao articledao = new ArticleDao();
 	MemberDao memberdao = new MemberDao();
 	Member loginedMember = null;
+	LikeDao likedao = new LikeDao();
+	LikeDao likeMemebrs = null;
+
 
 	public void start() {
 		for (;;) {
@@ -132,18 +135,21 @@ public class App {
 							}
 
 							else if (targetnum == 2) {
-								int a = 1;
-								if(loginedMember.getCheckNo() == 0) {
-									loginedMember.setCheckNo(a);
-									target.setLike(target.getLike() + 1);
-									System.out.println("해당 게시물을 좋아합니다.");								
+								Like rst = likedao.getLike(target.getId(), loginedMember.getId());
+								if (rst == null) {
+									Like like = new Like(target.getId(), loginedMember.getId());
+									likedao.insertLike(like);
+									System.out.println("해당 게시물을 좋아합니다.");
+									System.out.println("좋아요 누른 멤버 : " + loginedMember.getNickName());
 								} else {
-									a =0;
-									loginedMember.setCheckNo(a);
-									target.setLike(target.getLike() - 1);
+									likedao.removeLike(rst);
 									System.out.println("해당 게시물의 좋아요를 해제합니다.");
+									System.out.println("좋아요 누른 멤버 : " );
 								}
-
+								
+								printArticle(target);
+								
+								
 							} else if (targetnum == 3) {
 
 								if (target.getLoginId().equals(loginedMember.getLoginId())) {
@@ -291,7 +297,8 @@ public class App {
 		} else {
 			System.out.println("등록날짜 : " + target.getDate());
 		}
-		System.out.println("좋아요 : " + target.getLike());
+		int likeCnt = likedao.getLikeCount(target.getId());
+		System.out.println("좋아요 : " + likeCnt);
 		System.out.println("===============");
 		System.out.println("================댓글==============");
 
