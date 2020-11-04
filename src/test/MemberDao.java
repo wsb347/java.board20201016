@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MemberDao {
+	
 	private ArrayList<Member> members;
 	private int no = 2;
 
@@ -39,6 +40,7 @@ public class MemberDao {
 
 		members.add(a);
 	}
+
 	
 //	public Member getMemberByLogin(String id, String pw) {
 //		int n = 0;

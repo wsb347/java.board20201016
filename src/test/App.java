@@ -12,7 +12,8 @@ public class App {
 	Member loginedMember = null;
 	LikeDao likedao = new LikeDao();
 	LikeDao likeMemebrs = null;
-
+	ArrayList<String> likeMember = new ArrayList<>();
+	
 
 	public void start() {
 		for (;;) {
@@ -140,16 +141,18 @@ public class App {
 									Like like = new Like(target.getId(), loginedMember.getId());
 									likedao.insertLike(like);
 									System.out.println("해당 게시물을 좋아합니다.");
-									System.out.println("좋아요 누른 멤버 : " + loginedMember.getNickName());
+									
+									likeMember.add(loginedMember.getNickName());
+									System.out.println("좋아요 누른 멤버 : " + likeMember);
 								} else {
 									likedao.removeLike(rst);
 									System.out.println("해당 게시물의 좋아요를 해제합니다.");
-									System.out.println("좋아요 누른 멤버 : " );
+									likeMember.remove(loginedMember.getNickName());
+									System.out.println("좋아요 누른 멤버 : " + likeMember);
 								}
-								
+
 								printArticle(target);
-								
-								
+
 							} else if (targetnum == 3) {
 
 								if (target.getLoginId().equals(loginedMember.getLoginId())) {

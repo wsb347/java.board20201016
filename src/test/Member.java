@@ -8,6 +8,7 @@ public class Member {
 	private String date;
 	
 	
+	
 	public Member() {
 		
 	}
@@ -59,5 +60,6 @@ public class Member {
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
+
 	
 }
