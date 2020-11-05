@@ -73,13 +73,14 @@ public class Article {
 
 	}
 
-	public Article(int id, String title, String body, String date, String nickname, String loginId) {
+	public Article(int id, String title, String body, String date, String nickname, String loginId, int read) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
 		this.date = date;
 		this.nickname = nickname;
 		this.loginId = loginId;
+		this.read= read;
 	}
 
 	public int getId() {

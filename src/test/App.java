@@ -1,7 +1,8 @@
 package test;
 
-import java.nio.channels.MembershipKey;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class App {
@@ -13,7 +14,6 @@ public class App {
 	LikeDao likedao = new LikeDao();
 	LikeDao likeMemebrs = null;
 	ArrayList<String> likeMember = new ArrayList<>();
-	
 
 	public void start() {
 		for (;;) {
@@ -150,7 +150,7 @@ public class App {
 									likeMember.remove(loginedMember.getNickName());
 									System.out.println("좋아요 누른 멤버 : " + likeMember);
 								}
-
+								
 								printArticle(target);
 
 							} else if (targetnum == 3) {
@@ -258,6 +258,14 @@ public class App {
 					System.out.println("로그아웃 되었습니다");
 				}
 
+			} // logout 로그아웃
+			
+			if (i.equals("article sort")) {
+				// 조회수로 오름차순
+				ArrayList<Article> articles =  articledao.getArticles();
+				MyComparator comp = new MyComparator();
+				Collections.sort(articles,comp);
+				printArticles(articles);
 			}
 
 		} // for 무한반복
@@ -334,4 +342,16 @@ public class App {
 		return false;
 	}
 
+}
+
+class MyComparator implements Comparator<Article>{
+
+	@Override
+	public int compare(Article o1, Article o2) {
+		if(o1.getRead() > o2.getRead()) {
+			return 1;
+		}
+		return -1;
+	}
+	
 }
