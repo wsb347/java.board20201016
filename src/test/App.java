@@ -13,7 +13,7 @@ public class App {
 	Member loginedMember = null;
 	LikeDao likedao = new LikeDao();
 	LikeDao likeMemebrs = null;
-	ArrayList<String> likeMember = new ArrayList<>();
+	ArrayList<Article> likeMember = new ArrayList<>();
 
 	public void start() {
 		for (;;) {
@@ -140,17 +140,17 @@ public class App {
 								if (rst == null) {
 									Like like = new Like(target.getId(), loginedMember.getId());
 									likedao.insertLike(like);
+									target.setLike(target.getLike() + 1);
 									System.out.println("해당 게시물을 좋아합니다.");
-									
-									likeMember.add(loginedMember.getNickName());
 									System.out.println("좋아요 누른 멤버 : " + likeMember);
 								} else {
 									likedao.removeLike(rst);
+									target.setLike(target.getLike() - 1);
 									System.out.println("해당 게시물의 좋아요를 해제합니다.");
 									likeMember.remove(loginedMember.getNickName());
 									System.out.println("좋아요 누른 멤버 : " + likeMember);
 								}
-								
+
 								printArticle(target);
 
 							} else if (targetnum == 3) {
@@ -259,13 +259,23 @@ public class App {
 				}
 
 			} // logout 로그아웃
-			
+
 			if (i.equals("article sort")) {
-				// 조회수로 오름차순
-				ArrayList<Article> articles =  articledao.getArticles();
+				System.out.println("정렬 대상을 선택해주세요. (like : 좋아요,  read : 조회수) :");
+				String sortType = sc.nextLine();
+				System.out.println("정렬 방법을 선택해주세요. (asc : 오름차순,  desc : 내림차순) :");
+				String sortOrder = sc.nextLine();
 				MyComparator comp = new MyComparator();
-				Collections.sort(articles,comp);
+				comp.sortOrder = sortOrder;
+				comp.sortType = sortType;
+				// 조회수로 오름차순
+				ArrayList<Article> articles = articledao.getArticles();
+				Collections.sort(articles, comp);
 				printArticles(articles);
+			} // sort 정렬
+			
+			if(i.equals("article page")) {
+				
 			}
 
 		} // for 무한반복
@@ -344,14 +354,37 @@ public class App {
 
 }
 
-class MyComparator implements Comparator<Article>{
+class MyComparator implements Comparator<Article> {
+
+	String sortOrder = "asc";
+	String sortType = "read";
 
 	@Override
 	public int compare(Article o1, Article o2) {
-		if(o1.getRead() > o2.getRead()) {
-			return 1;
+		int c1 = o1.getRead();
+		int c2 = o2.getRead();
+
+		if (sortType.equals("read")) {
+			c1 = o1.getRead();
+			c2 = o2.getRead();
+		} else if (sortType.equals("like")) {
+			c1 = o1.getLike();
+			c2 = o2.getLike();
 		}
-		return -1;
+
+		if (sortOrder.equals("asc")) {
+			if (c1 > c2) {
+				return 1;
+			}
+
+			return -1;
+		} else {
+			if (c1 < c2) {
+				return 1;
+			}
+
+			return -1;
+		}
 	}
-	
+
 }
