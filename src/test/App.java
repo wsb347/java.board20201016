@@ -30,7 +30,14 @@ public class App {
 				System.out.println("프로그램이 종료됩니다.");
 				break;
 			} // exit 종료
+			
+			if (i.equals("help")) {
+				System.out.println("article [add: 게시물 추가 / list : 게시물 목록 조회 / read : 게시물 조회 / search : 검색]\r\n"
+						+ "member [signup : 회원가입 / signin : 로그인 / findpass : 비밀번호 찾기 / findid : 아이디 찾기 / logout : 로그아웃 / myinfo : 나의 정보 확인및 수정]");
+			} // help 도움말
 
+//			-------------------------------article-------------------------------------------
+			
 			if (i.equals("article add")) {
 				if (isLogin()) {
 					Article a = new Article();
@@ -196,8 +203,27 @@ public class App {
 				printArticles(searchedArticles);
 			} // search 검색
 
-			if (i.equals("member signup")) {
+			if (i.equals("article sort")) {
+				System.out.println("정렬 대상을 선택해주세요. (like : 좋아요,  read : 조회수) :");
+				String sortType = sc.nextLine();
+				System.out.println("정렬 방법을 선택해주세요. (asc : 오름차순,  desc : 내림차순) :");
+				String sortOrder = sc.nextLine();
+				MyComparator comp = new MyComparator();
+				comp.sortOrder = sortOrder;
+				comp.sortType = sortType;
+				// 조회수로 오름차순
+				ArrayList<Article> articles = articledao.getArticles();
+				Collections.sort(articles, comp);
+				printArticles(articles);
+			} // sort 정렬
+			
+			if(i.equals("article page")) {
+				
+			} // page 페이징
 
+//			-------------------------------member-----------------------------------------
+			
+			if (i.equals("member signup")) {
 				System.out.println("==== 회원 가입을 진행합니다 ====");
 				Member member = new Member();
 
@@ -244,42 +270,16 @@ public class App {
 				if (n == 0) {
 					System.out.println("비밀번호를 틀렸거나 잘못된 회원정보입니다.");
 				}
-
 			} // login 로그인
-
-			if (i.equals("help")) {
-				System.out.println("article [add: 게시물 추가 / list : 게시물 목록 조회 / read : 게시물 조회 / search : 검색]\r\n"
-						+ "member [signup : 회원가입 / signin : 로그인 / findpass : 비밀번호 찾기 / findid : 아이디 찾기 / logout : 로그아웃 / myinfo : 나의 정보 확인및 수정]");
-			} // help 도움말
 
 			if (i.equals("member logout")) {
 				if (isLogin()) {
 					loginedMember = null;
 					System.out.println("로그아웃 되었습니다");
 				}
-
 			} // logout 로그아웃
 
-			if (i.equals("article sort")) {
-				System.out.println("정렬 대상을 선택해주세요. (like : 좋아요,  read : 조회수) :");
-				String sortType = sc.nextLine();
-				System.out.println("정렬 방법을 선택해주세요. (asc : 오름차순,  desc : 내림차순) :");
-				String sortOrder = sc.nextLine();
-				MyComparator comp = new MyComparator();
-				comp.sortOrder = sortOrder;
-				comp.sortType = sortType;
-				// 조회수로 오름차순
-				ArrayList<Article> articles = articledao.getArticles();
-				Collections.sort(articles, comp);
-				printArticles(articles);
-			} // sort 정렬
-			
-			if(i.equals("article page")) {
-				
-			}
-
 		} // for 무한반복
-
 	}
 
 	private void printArticles(ArrayList<Article> articleList) {
