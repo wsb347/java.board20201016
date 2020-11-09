@@ -10,7 +10,6 @@ public class App {
 	CommentDao commentdao = new CommentDao();
 	ArticleDao articledao = new ArticleDao();
 	MemberDao memberdao = new MemberDao();
-	PageDao pagedao = new PageDao();
 	Member loginedMember = null;
 	LikeDao likedao = new LikeDao();
 	LikeDao likeMemebrs = null;
@@ -220,28 +219,12 @@ public class App {
 
 			if (i.equals("article page")) {
 				ArrayList<Article> articles = articledao.getArticles();
-				Page page = new Page();
 				System.out.println("페이지 번호를 입력하세요");
 				int no = sc.nextInt();
-				page.setCurrentPageNo(no);
-				page.setTotalCntOfItems(articles.size());
 				
-				for (int j = page.getStartIndex(); j < page.getEndIndex(); j++) {
-					System.out.println("번호 : " + articles.get(j).getId());
-					System.out.println("제목 : " + articles.get(j).getTitle());
-					System.out.println("내용 : " + articles.get(j).getBody());
-					System.out.println("===========================================");
-				}
-
-				for (int j = page.getStartPageNoInBlock(); j <= page.getEndPageNoInBlock(); j++) {
-
-					if (j == page.getCurrentPageNo()) {
-						System.out.print("[" + i + "] ");
-					} else {
-						System.out.print(i + " ");
-					}
-				}
+				
 			} // page 페이징
+			
 
 //			-------------------------------member-----------------------------------------
 
