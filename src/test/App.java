@@ -10,6 +10,7 @@ public class App {
 	CommentDao commentdao = new CommentDao();
 	ArticleDao articledao = new ArticleDao();
 	MemberDao memberdao = new MemberDao();
+	PageDao pagedao = new PageDao();
 	Member loginedMember = null;
 	LikeDao likedao = new LikeDao();
 	LikeDao likeMemebrs = null;
@@ -30,14 +31,14 @@ public class App {
 				System.out.println("프로그램이 종료됩니다.");
 				break;
 			} // exit 종료
-			
+
 			if (i.equals("help")) {
 				System.out.println("article [add: 게시물 추가 / list : 게시물 목록 조회 / read : 게시물 조회 / search : 검색]\r\n"
 						+ "member [signup : 회원가입 / signin : 로그인 / findpass : 비밀번호 찾기 / findid : 아이디 찾기 / logout : 로그아웃 / myinfo : 나의 정보 확인및 수정]");
 			} // help 도움말
 
 //			-------------------------------article-------------------------------------------
-			
+
 			if (i.equals("article add")) {
 				if (isLogin()) {
 					Article a = new Article();
@@ -216,13 +217,34 @@ public class App {
 				Collections.sort(articles, comp);
 				printArticles(articles);
 			} // sort 정렬
-			
-			if(i.equals("article page")) {
+
+			if (i.equals("article page")) {
+				ArrayList<Article> articles = articledao.getArticles();
+				Page page = new Page();
+				System.out.println("페이지 번호를 입력하세요");
+				int no = sc.nextInt();
+				page.setCurrentPageNo(no);
+				page.setTotalCntOfItems(articles.size());
 				
+				for (int j = page.getStartIndex(); j < page.getEndIndex(); j++) {
+					System.out.println("번호 : " + articles.get(j).getId());
+					System.out.println("제목 : " + articles.get(j).getTitle());
+					System.out.println("내용 : " + articles.get(j).getBody());
+					System.out.println("===========================================");
+				}
+
+				for (int j = page.getStartPageNoInBlock(); j <= page.getEndPageNoInBlock(); j++) {
+
+					if (j == page.getCurrentPageNo()) {
+						System.out.print("[" + i + "] ");
+					} else {
+						System.out.print(i + " ");
+					}
+				}
 			} // page 페이징
 
 //			-------------------------------member-----------------------------------------
-			
+
 			if (i.equals("member signup")) {
 				System.out.println("==== 회원 가입을 진행합니다 ====");
 				Member member = new Member();
