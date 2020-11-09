@@ -27,6 +27,17 @@ public class ArticleDao {
 		articles.add(test1);
 		articles.add(test2);
 		articles.add(test3);
+		
+		for(int i = 1; i <= 50 ; i++) {
+			Article a4 = new Article();
+			a4.setId(i);
+			a4.setTitle("제목" + i);
+			a4.setBody("내용" + i);
+			a4.setNickname("익명");
+			a4.setDate("2020.11.09");
+			articles.add(a4);
+			
+		}
 	}
 
 	public void insertArticle(Article a) {
