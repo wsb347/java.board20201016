@@ -200,7 +200,7 @@ public class App {
 
 				ArrayList<Article> searchedArticles;
 				searchedArticles = articledao.getSearchedArticlesByFlag(targetId, keyword);
-				printArticles(searchedArticles, 1, searchedArticles.size());
+				printArticles(searchedArticles);
 			} // search 검색
 
 			if (i.equals("article sort")) {
@@ -214,13 +214,15 @@ public class App {
 				// 조회수로 오름차순
 				ArrayList<Article> articles = articledao.getArticles();
 				Collections.sort(articles, comp);
-				printArticles(articles,1, articles.size());
+				printArticles(articles);
 			} // sort 정렬
 
 			if (i.equals("article page")) {
 				ArrayList<Article> articles = articledao.getArticles();
 				int currentPageNo = 1;
-				printArticles(articles, currentPageNo, articles.size());
+				System.out.println("출력할 게시물의 개수를 입력해주세요");
+				int itemsCntPerPage = sc.nextInt();
+				printArticles(articles, currentPageNo, itemsCntPerPage);
 				
 				while(true) {
 					System.out.println(
@@ -228,25 +230,25 @@ public class App {
 					String pageCmd = sc.next();
 					if (pageCmd.equals("next")) {
 						currentPageNo++;
-						printArticles(articles, currentPageNo, 3);
+						printArticles(articles, currentPageNo, itemsCntPerPage);
 					} else if(pageCmd.equals("prev")) {
 						currentPageNo--;
-						printArticles(articles, currentPageNo, 3);
+						printArticles(articles, currentPageNo, itemsCntPerPage);
 					} else if (pageCmd.equals("nextPage")) {
-						currentPageNo += 5;
-						printArticles(articles, currentPageNo, 3);
+						currentPageNo = (currentPageNo + 5) - (currentPageNo + 5) % 5 + 1;
+						printArticles(articles, currentPageNo, itemsCntPerPage);
 					} else if(pageCmd.equals("prevPage")) {
-						currentPageNo -= 5;
-						printArticles(articles, currentPageNo, 3);
+						currentPageNo = (currentPageNo - 5) - (currentPageNo - 5) % 5 + 1;
+						printArticles(articles, currentPageNo, itemsCntPerPage);
 					} else if(pageCmd.equals("go")) {
 						System.out.println("이동할 페이지를 선택해주세요");
 						int num = sc.nextInt();
 						currentPageNo = num;
-						printArticles(articles, currentPageNo, 3);
+						printArticles(articles, currentPageNo, itemsCntPerPage);
 					} else if(pageCmd.equals("count")) {
 						System.out.println("출력할 게시물의 개수를 입력해주세요");
 						int num = sc.nextInt();
-						int itemsCntPerPage = num;
+						itemsCntPerPage = num;
 						printArticles(articles, currentPageNo, itemsCntPerPage);
 					} else if (pageCmd.equals("back")) {
 						break;
@@ -370,6 +372,19 @@ public class App {
 		System.out.println();
 	}
 
+	private void printArticles(ArrayList<Article> articleList) {
+		for (int i = 0; i < articleList.size(); i++) {
+			Article article = articleList.get(i);
+			System.out.println("번호 : " + article.getId());
+			System.out.println("제목 : " + article.getTitle());
+			System.out.println("등록날짜 : " + article.getDate());
+			System.out.println("작성자 : " + article.getNickname());
+			System.out.println("조회수 : " + article.getRead());
+			System.out.println("===================");
+		}
+
+	}
+	
 	private void printComments(ArrayList<Comment> commentList) {
 		for (int i = 0; i < commentList.size(); i++) {
 			Comment comment = commentList.get(i);
