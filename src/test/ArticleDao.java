@@ -20,13 +20,13 @@ public class ArticleDao {
 	public ArticleDao() {
 		articles = new ArrayList<>();
 
-		Article test1 = new Article(1, "a", "a", "2020.10.20", "익명", "aasdfadf", 20);
-		Article test2 = new Article(2, "b", "b", "2020.10.21", "익명","asdfasdf", 25);
-		Article test3 = new Article(3, "c", "c", "2020.10.21", "익명","Adsfasdf", 23);
-
-		articles.add(test1);
-		articles.add(test2);
-		articles.add(test3);
+//		Article test1 = new Article(1, "a", "a", "2020.10.20", "익명", "aasdfadf", 20);
+//		Article test2 = new Article(2, "b", "b", "2020.10.21", "익명","asdfasdf", 25);
+//		Article test3 = new Article(3, "c", "c", "2020.10.21", "익명","Adsfasdf", 23);
+//
+//		articles.add(test1);
+//		articles.add(test2);
+//		articles.add(test3);
 		
 		for(int i = 1; i <= 50 ; i++) {
 			Article a4 = new Article();
