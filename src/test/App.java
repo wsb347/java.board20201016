@@ -226,7 +226,7 @@ public class App {
 				
 				while(true) {
 					System.out.println(
-							"페이징 명령어를 입력해주세요 \n(prev : 이전,  next : 다음, prevPage : 이전페이지, nextPage : 다음페이지, count : 페이지당 게시물 수  go : 선택,  back : 뒤로가기): ");
+							"페이징 명령어를 입력해주세요 \n(prev : 이전,  next : 다음, prevpage : 이전페이지, nextpage : 다음페이지, count : 페이지당 게시물 수  go : 선택,  back : 뒤로가기): ");
 					String pageCmd = sc.next();
 					if (pageCmd.equals("next")) {
 						currentPageNo++;
@@ -234,10 +234,10 @@ public class App {
 					} else if(pageCmd.equals("prev")) {
 						currentPageNo--;
 						printArticles(articles, currentPageNo, itemsCntPerPage);
-					} else if (pageCmd.equals("nextPage")) {
+					} else if (pageCmd.equals("nextpage")) {
 						currentPageNo = (currentPageNo + 5) - (currentPageNo + 5) % 5 + 1;
 						printArticles(articles, currentPageNo, itemsCntPerPage);
-					} else if(pageCmd.equals("prevPage")) {
+					} else if(pageCmd.equals("prevpage")) {
 						currentPageNo = (currentPageNo - 5) - (currentPageNo - 5) % 5 + 1;
 						printArticles(articles, currentPageNo, itemsCntPerPage);
 					} else if(pageCmd.equals("go")) {
